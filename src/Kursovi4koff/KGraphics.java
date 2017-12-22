@@ -29,7 +29,7 @@ public class KGraphics extends javax.swing.JFrame {
     public KGraphics() {
         initComponents();
     }
-
+    /*Инициализация глобальных переменных*/
     int width;
     int heigth;
     int solve;
@@ -42,19 +42,19 @@ public class KGraphics extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
+    /*Контейнер DrawPanel, переопределяющий метод paintComponent, ответственный за отрисовку*/
     public class DrawPanel extends JPanel {
         private static final long serialVersionUID = 1L;
-
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
-
+            /*Отрисовка полей матрицы*/
             for(int i=0; i< heigth; i++){
                 for(int j=0; j< width; j++) {
-                    if(field.matrix[i][j]==0)
+                    if(field.matrix[i][j]==0)   //Если поле свободно, красим в желтый
                         g2d.setColor(Color.yellow);
-                    else
+                    else                        //Иначе в зеленый
                         g2d.setColor(Color.blue);
                     g2d.fillRect(50 + j * 40, 50+i*40, 40, 40);
                 }
@@ -62,10 +62,12 @@ public class KGraphics extends javax.swing.JFrame {
             g2d.setColor(Color.black);
             Font font= new Font("Arial", Font.CENTER_BASELINE, 30);
             g2d.setFont(font);
+            /*Отрисовка символов координат*/
             for(int i=0; i<heigth; i++)
                 g2d.drawString(String.valueOf(i+1), 13, 80+i*40);
             for(int i=0; i<width; i++)
                 g2d.drawString(String.valueOf(i+1), 55+i*40, 45);
+            /*Если задача была решена, выполняем отрисовку целевых прямоугольников*/
             if(solve==1){
                 g2d.setColor(Color.red);
                 solve=0;
@@ -78,9 +80,19 @@ public class KGraphics extends javax.swing.JFrame {
                         for (int n = x1; n <= x2; n++)
                             g2d.fillRect(50 + n * 40, 50 + m * 40, 40, 40);
                     }
+                    /*Выделяем прямоугольник толстой линией*/
+                    g2d.setColor(Color.black);
+                    g2d.setStroke(new BasicStroke(5));
+                    g2d.drawLine(50+x1*40, 50+y1*40, 50+x1*40, 50+(y2+1)*40);
+                    g2d.drawLine(50+x1*40, 50+y1*40, 50+(x2+1)*40, 50+y1*40);
+                    g2d.drawLine(50+(x2+1)*40, 50+(y2+1)*40, 50+(x2+1)*40, 50+y1*40);
+                    g2d.drawLine(50+(x2+1)*40, 50+(y2+1)*40, 50+x1*40, 50+(y2+1)*40);
+                    g2d.setColor(Color.red);
                 }
             }
             g2d.setColor(Color.black);
+            g2d.setStroke(new BasicStroke(1));
+            /*Отрисовка координатной сетки*/
             for(int i=0; i<heigth+2; i++)
                 g2d.drawLine(10, 10 + i * 40, 50 + width * 40, 10 + i * 40);
             for(int i=0; i<width+2; i++)
@@ -90,15 +102,16 @@ public class KGraphics extends javax.swing.JFrame {
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
+    /*Инициализация компонентов*/
     private void initComponents() {
 
-        jPanel1 = new DrawPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jPanel1 = new DrawPanel();  //Контейнер
+        jButton1 = new javax.swing.JButton();//
+        jButton2 = new javax.swing.JButton();//
+        jButton3 = new javax.swing.JButton();// КНОПКИ
+        jButton4 = new javax.swing.JButton();//
+        jScrollPane2 = new javax.swing.JScrollPane();//Панель прокрутки
+        jTextArea1 = new javax.swing.JTextArea();//Зона текста
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1300, 800));
@@ -192,58 +205,60 @@ public class KGraphics extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-
+    /*Назначение действия на 1ю кнопку.*/
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        String sWidth = JOptionPane.showInputDialog("Enter the width of the field");
+        String sWidth = JOptionPane.showInputDialog("Enter the width of the field");//Диалоговое окно для введения ширины поля
         width= Integer.parseInt(sWidth);
-        String sHeigth = JOptionPane.showInputDialog("Enter the heigth of the field");
+        String sHeigth = JOptionPane.showInputDialog("Enter the heigth of the field");//Диалоговое окно для введения длины поля
         heigth= Integer.parseInt(sHeigth);
-        field= new Field(width, heigth);
-        jPanel1.repaint();
+        field= new Field(width, heigth);//Создание объекта класса поле
+        jPanel1.repaint();//Отрисовка
     }
-
+    /*Назначение действия на вторую кнопку*/
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        jPanel1.addMouseListener(new MouseAdapter() {
+        jPanel1.addMouseListener(new MouseAdapter() { //Вешаем прослушиватель мыши на контейнер
             int mouseX;
             int mouseY;
             @Override
-            public void mouseClicked(MouseEvent e){
-                mouseX = e.getX();
-                mouseY = e.getY();
+            public void mouseClicked(MouseEvent e){ //Задание действия по клику мыши на поле
+                mouseX = e.getX();//
+                mouseY = e.getY();// ПОЛУЧАЕМ КООРДИНАТЫ КУРСОРА В МОМЕНТ КЛИКА
                 int x= (mouseX-50)/40;
-                int y= (mouseY-50)/40;
+                int y= (mouseY-50)/40;// ВЫЧИСЛЯЕМ КООРДИНАТЫ ЯЧЕЙКИ, В КОТОРОЙ БЫЛ ПРОИЗВЕДЕН КЛИК
                 if(x<field.width && y<field.heigth) {
-                    field.matrix[y][x]=1;
-                    jPanel1.repaint();
+                    field.matrix[y][x]=1;   //Помечаем ячейку как заняткю
+                    jPanel1.repaint();      //Раскрашиваем ее в другой цвет
                 }
             }
         });
     }
-
+    /*Назначения действия на 3 кнопку*/
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        myAnswer= Algorhytms.findRectangle(field);
+        myAnswer= Algorhytms.findRectangle(field); //Решаем задачу
         solve=1;
         int number=1;
-        jPanel1.repaint();
-        jTextArea1.append("Square= "+String.valueOf(myAnswer.get(0).square));
-        for(Answer i: myAnswer){
-            jTextArea1.append( "\n Rectangle "+ String.valueOf(number)+"\n x1= "+ String.valueOf(i.x1)+", y1= "+String.valueOf(i.y1)+"\n x2= "+ String.valueOf(i.x2)+", y2= "+String.valueOf(i.y2));
+        jTextArea1.setText(null);//Очищаем текстовое окно
+        jPanel1.repaint();//Закрашиваем полученный(ые) прямоугольники
+        jTextArea1.append("Square= "+String.valueOf(myAnswer.get(0).square)+"\n");
+        for(Answer i: myAnswer){    //Выводим в текстовое окно необходимые данные
+            jTextArea1.append( "Rectangle "+ String.valueOf(number)+"\n x1= "+ String.valueOf(i.x1)+", y1= "+String.valueOf(i.y1)+"\n x2= "+ String.valueOf(i.x2)+", y2= "+String.valueOf(i.y2)+"\n");
             number++;
         }
     }
+    /*Назначение действия на 4 кнопку*/
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-        jPanel1.addMouseListener(new MouseAdapter() {
+        jPanel1.addMouseListener(new MouseAdapter() {   //Вешаем прослушиватель мыши на контейнер
             int mouseX;
             int mouseY;
             @Override
             public void mouseClicked(MouseEvent e){
-                mouseX = e.getX();
-                mouseY = e.getY();
-                int x= (mouseX-50)/40;
-                int y= (mouseY-50)/40;
+                mouseX = e.getX();//
+                mouseY = e.getY();// ПОЛУЧАЕМ КООРДИНАТЫ КУРСОРА В МОМЕНТ КЛИКА
+                int x= (mouseX-50)/40;//
+                int y= (mouseY-50)/40;// ВЫЧИСЛЯЕМ КООРДИНАТЫ ЯЧЕЙКИ, В КОТОРОЙ БЫЛ ПРОИЗВЕДЕН КЛИК
                 if(x<field.width && y<field.heigth) {
-                    field.matrix[y][x]=0;
-                    jPanel1.repaint();
+                    field.matrix[y][x]=0;//Помечаем ячейку как свободную
+                    jPanel1.repaint();//Раскрашиваем ее в прежний цвет
                 }
             }
         });

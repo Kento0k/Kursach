@@ -1,5 +1,5 @@
 package Kursovi4koff;
-
+/*Класс ответ. Каждый объект такого класса содержит необходимые результаты. Есть проверка на повторы*/
 public class Answer {
     int square;
     int x1;

@@ -1,7 +1,7 @@
 package Kursovi4koff;
 
 import java.util.Random;
-
+/*Класс поле. Каждый объект такого класса содержит координаты всех препятствий и размеры поля*/
 public class Field {
     int[][] matrix;
     int width;
@@ -11,11 +11,5 @@ public class Field {
         this.width= width;
         this.heigth= heigth;
         this.matrix= new int[heigth][width];
-        int busyWidth, busyHeigth;
-        /*for(int i=0; i<width*heigth/2; i++){
-            busyHeigth= rnd.nextInt(heigth);
-            busyWidth= rnd.nextInt(width);
-            matrix[busyHeigth][busyWidth]=1;
-        }*/
     }
 }
