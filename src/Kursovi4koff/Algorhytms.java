@@ -69,7 +69,7 @@ public class Algorhytms {
             rightDynamic.add(i, field.width);
         }
         for(int i=0; i<field.heigth; i++){
-            //Для каждой строки рассчитываем ее левые, правые и верхние динамики
+            //Для каждой строки рассчитываем левые, правые и верхние динамики для ее элементов
             topDynamic= lineDynamics(field, i, topDynamic);
             leftDynamic= leftSideDynamics(field, topDynamic, leftDynamic);
             rightDynamic= rightSideDynamics(field, topDynamic, rightDynamic);

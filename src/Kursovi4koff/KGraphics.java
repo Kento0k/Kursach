@@ -16,6 +16,8 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -54,7 +56,7 @@ public class KGraphics extends javax.swing.JFrame {
                 for(int j=0; j< width; j++) {
                     if(field.matrix[i][j]==0)   //Если поле свободно, красим в желтый
                         g2d.setColor(Color.yellow);
-                    else                        //Иначе в зеленый
+                    else                        //Иначе в синий
                         g2d.setColor(Color.blue);
                     g2d.fillRect(50 + j * 40, 50+i*40, 40, 40);
                 }
@@ -207,10 +209,23 @@ public class KGraphics extends javax.swing.JFrame {
 
     /*Назначение действия на 1ю кнопку.*/
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        Pattern template= Pattern.compile("^[0-9]+$");
         String sWidth = JOptionPane.showInputDialog("Enter the width of the field");//Диалоговое окно для введения ширины поля
-        width= Integer.parseInt(sWidth);
+        Matcher m=template.matcher(sWidth);
+        if(m.matches())
+            width= Integer.parseInt(sWidth);
+        else{
+            JOptionPane.showMessageDialog(this, "Wrong input!");
+            return;
+        }
         String sHeigth = JOptionPane.showInputDialog("Enter the heigth of the field");//Диалоговое окно для введения длины поля
-        heigth= Integer.parseInt(sHeigth);
+        m= template.matcher(sHeigth);
+        if(m.matches())
+            heigth= Integer.parseInt(sHeigth);
+        else{
+            JOptionPane.showMessageDialog(this, "Wrong input!");
+            return;
+        }
         field= new Field(width, heigth);//Создание объекта класса поле
         jPanel1.repaint();//Отрисовка
     }
@@ -238,12 +253,15 @@ public class KGraphics extends javax.swing.JFrame {
         solve=1;
         int number=1;
         jTextArea1.setText(null);//Очищаем текстовое окно
-        jPanel1.repaint();//Закрашиваем полученный(ые) прямоугольники
-        jTextArea1.append("Square= "+String.valueOf(myAnswer.get(0).square)+"\n");
-        for(Answer i: myAnswer){    //Выводим в текстовое окно необходимые данные
-            jTextArea1.append( "Rectangle "+ String.valueOf(number)+"\n x1= "+ String.valueOf(i.x1)+", y1= "+String.valueOf(i.y1)+"\n x2= "+ String.valueOf(i.x2)+", y2= "+String.valueOf(i.y2)+"\n");
-            number++;
+        if(myAnswer.get(0).square>0) {
+            jPanel1.repaint();//Закрашиваем полученный(ые) прямоугольники
+            jTextArea1.append("Square= " + String.valueOf(myAnswer.get(0).square) + "\n");
+            for (Answer i : myAnswer) {    //Выводим в текстовое окно необходимые данные
+                jTextArea1.append("Rectangle " + String.valueOf(number) + "\n x1= " + String.valueOf(i.x1) + ", y1= " + String.valueOf(i.y1) + "\n x2= " + String.valueOf(i.x2) + ", y2= " + String.valueOf(i.y2) + "\n");
+                number++;
+            }
         }
+        return;
     }
     /*Назначение действия на 4 кнопку*/
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
